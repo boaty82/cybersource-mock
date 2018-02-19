@@ -1,0 +1,92 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.10.RELEASE'
+		cukesVersion = '1.2.5'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group = 'uk.co.bty.mock'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.5.1'
+}
+
+sourceSets {
+	integrationTest {
+		java {
+			srcDir 'src/integrationTest/java'
+		}
+		resources {
+			srcDir 'src/integrationTest/resources'
+		}
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+	}
+}
+
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
+idea {
+	module {
+		testSourceDirs += file('src/integrationTest/java')
+		scopes.TEST.plus += [configurations.integrationTestCompile]
+		scopes.TEST.plus += [configurations.integrationTestRuntime]
+	}
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter')
+	compile('org.springframework.boot:spring-boot-starter-web')
+
+	testCompile 'junit:junit:4.12'
+	testCompile 'org.assertj:assertj-core:3.9.0'
+	testCompile 'org.assertj:assertj-core-java8:1.0.0m1'
+
+	integrationTestCompile "info.cukes:cucumber-java:${cukesVersion}"
+	integrationTestCompile "info.cukes:cucumber-junit:${cukesVersion}"
+}
+
+task integrationTest(type: Test) {
+	group 'verification'
+	description 'Runs integration tests'
+	dependsOn assemble, compileIntegrationTestJava
+	mustRunAfter test
+	doLast {
+		javaexec {
+			main = "cucumber.api.cli.Main"
+			classpath = configurations.integrationTestRuntime +
+					sourceSets.main.output +
+					sourceSets.integrationTest.output
+			args = ['--plugin', "html:${buildDir}/reports/${name}",
+					'--plugin', "json:${buildDir}/reports/${name}.json",
+					'--plugin', 'pretty',
+					'--glue', 'uk.co.bty.mock.cybersource.stepdefs',
+					'src/integrationTest/resources']
+		}
+	}
+	testClassesDir = sourceSets.integrationTest.output.classesDir
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	outputs.upToDateWhen { false }
+}
+
+check.dependsOn integrationTest
+
