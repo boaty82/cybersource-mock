@@ -1,12 +1,6 @@
 language: java
 sudo: false
 
-env:
-  - TEST_SUITE=test
-  - TEST_SUITE=integrationTest
-
-script: "bundle exec rake test:$TEST_SUITE"
-
 branches:
   only:
   - master
