@@ -1,10 +1,23 @@
 package uk.co.bty.mock.cybersource.stepdefs.token;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +35,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateTokenStepDefs
 {
-	private static final ObjectMapper MAPPER = new ObjectMapper();
-
 	@Value("${cucumber.sop.post.url}")
 	private String sopPostUrl;
 
@@ -63,9 +74,34 @@ public class CreateTokenStepDefs
 	}
 
 	@When("^I request a token$")
-	public void i_request_a_token()
+	public void i_request_a_token() throws IOException
 	{
-		throw new NotImplementedException("TODO, just want to try and run tests in travis for now");
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+
+			final List<NameValuePair> form = new ArrayList<>();
+			final Map<String, String> asMap = objectMapper.convertValue(cardState.getSopRequestForm(), Map.class);
+			for (Map.Entry<String, String> e : asMap.entrySet())
+			{
+				form.add(new BasicNameValuePair(e.getKey(), e.getValue()));
+			}
+			final UrlEncodedFormEntity entity = new UrlEncodedFormEntity(form, Consts.UTF_8);
+
+			final HttpPost httpPost = new HttpPost(sopPostUrl);
+			httpPost.setEntity(entity);
+
+			final ResponseHandler<String> responseHandler = response -> {
+				int status = response.getStatusLine().getStatusCode();
+				if (status >= 200 && status < 300) {
+					final HttpEntity responseEntity = response.getEntity();
+					return responseEntity != null ? EntityUtils.toString(responseEntity) : null;
+				} else {
+					throw new ClientProtocolException("Unexpected response status: " + status);
+				}
+			};
+
+			final String result = httpclient.execute(httpPost, responseHandler);
+			cardState.setPostResult(objectMapper.readValue(result, SopResponseForm.class));
+		}
 	}
 
 	@Then("^I receive back the given data$")
