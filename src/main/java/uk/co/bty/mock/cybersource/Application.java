@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
+@ImportResource("spring/beans.xml")
 public class Application extends SpringBootServletInitializer
 {
 	private static final Logger LOG = LoggerFactory.getLogger(Application.class);

@@ -1,0 +1,38 @@
+package tokenrules
+
+import uk.co.bty.mock.cybersource.rules.RuleType;
+import uk.co.bty.mock.cybersource.rules.data.RuleData
+import uk.co.bty.mock.cybersource.constants.TransactionDecision
+import uk.co.bty.mock.cybersource.constants.ReasonCode;
+import uk.co.bty.mock.cybersource.data.TokenRequestData;
+import uk.co.bty.mock.cybersource.data.TokenResponseData
+import uk.co.bty.mock.cybersource.constants.TransactionDecision
+import uk.co.bty.mock.cybersource.constants.ReasonCode;
+
+rule "Token - Surname is Decline"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.TOKEN, response == null, request#TokenRequestData.billForename == "TOKEN", request#TokenRequestData.billSurname == "DECLINE")
+then
+    r.setResponse(TokenResponseData.builder()
+                          .decision(TransactionDecision.DECLINE)
+                          .message("Billing name was 'TOKEN DECLINE'")
+                          .reasonCode(ReasonCode.DECLINED)
+                          .requestToken("zzzzzz")
+                          .build());
+    update(r);
+end
+
+rule "Token - Accepted"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.TOKEN, response == null)
+then
+    r.setResponse(TokenResponseData.builder()
+                          .decision(TransactionDecision.ACCEPT)
+                          .message("Request was processed successfully.")
+                          .reasonCode(ReasonCode.ACCEPT)
+                          .requestToken("abc123def456")
+                          .build());
+    update(r);
+end

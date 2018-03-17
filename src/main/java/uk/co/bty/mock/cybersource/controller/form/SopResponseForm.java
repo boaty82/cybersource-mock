@@ -1,10 +1,12 @@
-package uk.co.bty.mock.cybersource.stepdefs.token;
+package uk.co.bty.mock.cybersource.controller.form;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
 @Getter
-@NoArgsConstructor
+@Value
+@Builder(toBuilder = true)
 public class SopResponseForm
 {
 	private String decision;
@@ -44,6 +46,6 @@ public class SopResponseForm
 	private String signed_field_names;
 	private String transaction_id;
 	private String invalid_fields;
-
+	//TODO:
+//	private String utf8;
 }
-

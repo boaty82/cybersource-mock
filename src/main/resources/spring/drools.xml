@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="kieSessionFactory" class="uk.co.bty.mock.cybersource.rules.drools.KieSessionFactory">
+        <constructor-arg>
+            <bean class="uk.co.bty.mock.cybersource.rules.drools.KieBaseBuilder" factory-method="createService">
+                <constructor-arg value="default"/>
+                <constructor-arg>
+                    <bean class="org.kie.api.KieServices.Factory" factory-method="get" />
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <map>
+                <entry key="new_look_gbp_ecommerce">
+                    <bean class="uk.co.bty.mock.cybersource.rules.drools.KieBaseBuilder" factory-method="createService">
+                        <constructor-arg value="test_gbp_ecommerce"/>
+                        <constructor-arg>
+                            <bean class="org.kie.api.KieServices.Factory" factory-method="get" />
+                        </constructor-arg>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <alias name="droolRuleEngine" alias="ruleEngine"/>
+    <bean id="droolRuleEngine" class="uk.co.bty.mock.cybersource.rules.drools.DroolRuleEngine">
+        <property name="kieSessionFactory" ref="kieSessionFactory"/>
+    </bean>
+
+</beans>

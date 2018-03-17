@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <bean id="tokenResultConverter" class="uk.co.bty.mock.cybersource.controller.converter.TokenResultConverter"/>
+    <bean id="sopFormRequestConverter" class="uk.co.bty.mock.cybersource.controller.converter.SopFormRequestConverter"/>
+
+    <alias name="defaultTokenValidationService" alias="tokenValidationService"/>
+    <bean id="defaultTokenValidationService" class="uk.co.bty.mock.cybersource.service.token.impl.DefaultValidationService">
+        <property name="validators">
+            <list>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingEmailValidator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingForenameValidator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingSurnameValidator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingAddressLine1Validator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingAddressCityValidator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingAddressCountryValidator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.BillingAddressPostCodeValidator"/>
+                <bean class="uk.co.bty.mock.cybersource.service.token.impl.TransactionTypeValidator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="tokenRuleResultEntityConverter" class="uk.co.bty.mock.cybersource.service.token.converter.TokenRuleResultEntityConverter"/>
+
+    <bean id="tokenResultSavingService" class="uk.co.bty.mock.cybersource.service.impl.AbstractResultSavingService">
+        <property name="repository" ref="tokenRepository"/>
+        <property name="converter" ref="tokenRuleResultEntityConverter"/>
+    </bean>
+
+    <bean id="tokenRuleRequestConverter" class="uk.co.bty.mock.cybersource.service.token.converter.TokenRuleRequestConverter"/>
+    <bean id="tokenEntityResponseConverter" class="uk.co.bty.mock.cybersource.service.token.converter.TokenEntityResponseConverter"/>
+
+    <bean id="ruleAwareTokenisationService" class="uk.co.bty.mock.cybersource.service.token.impl.RuleAwareTokenisationService">
+        <property name="ruleEngine" ref="ruleEngine"/>
+        <property name="ruleRequestConverter" ref="tokenRuleRequestConverter"/>
+        <property name="resultSavingService" ref="tokenResultSavingService"/>
+        <property name="entityResponseConverter" ref="tokenEntityResponseConverter"/>
+    </bean>
+
+    <alias name="defaultTokenisationService" alias="tokenisationService"/>
+    <bean id="defaultTokenisationService" class="uk.co.bty.mock.cybersource.service.token.impl.RequestValidatingTokenisationService">
+        <property name="validationService" ref="tokenValidationService"/>
+        <property name="delegateTokenisationService" ref="ruleAwareTokenisationService"/>
+    </bean>
+
+    <bean id="objectToMapOfFieldNamesAndValuesConverter" class="uk.co.bty.mock.cybersource.service.signature.impl.ObjectToMapOfFieldNamesAndValuesConverter"/>
+    <util:list id="sopResponseSignedFields" value-type="java.lang.String">
+        <value>transaction_id</value>
+        <value>decision</value>
+        <value>req_access_key</value>
+        <value>req_profile_id</value>
+        <value>req_transaction_uuid</value>
+        <value>req_transaction_type</value>
+        <value>req_reference_number</value>
+        <value>req_currency</value>
+        <value>req_locale</value>
+        <value>req_payment_method</value>
+        <value>req_override_custom_receipt_page</value>
+        <value>req_override_custom_cancel_page</value>
+        <value>req_skip_decision_manager</value>
+        <value>req_bill_to_forename</value>
+        <value>req_bill_to_surname</value>
+        <value>req_bill_to_email</value>
+        <value>req_bill_to_address_line1</value>
+        <value>req_bill_to_address_line2</value>
+        <value>req_bill_to_address_city</value>
+        <value>req_bill_to_address_country</value>
+        <value>req_bill_to_address_postal_code</value>
+        <value>req_card_number</value>
+        <value>req_card_type</value>
+        <value>req_card_expiry_date</value>
+        <value>req_customer_ip_address</value>
+        <value>req_merchant_defined_data90</value>
+        <value>message</value>
+        <value>reason_code</value>
+        <value>request_token</value>
+        <value>payment_token</value>
+        <value>signed_field_names</value>
+        <value>signed_date_time</value>
+    </util:list>
+    <bean id="sopResponseSignatureGenerator" class="uk.co.bty.mock.cybersource.service.signature.impl.DefaultSignatureGenerator">
+        <property name="objectMapConverter" ref="objectToMapOfFieldNamesAndValuesConverter"/>
+        <property name="key" value="${signature.generator.key}"/>
+        <property name="fieldNamesToSign" ref="sopResponseSignedFields"/>
+    </bean>
+
+</beans>
