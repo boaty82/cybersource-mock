@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:application.properties" order="2"/>
+    <context:property-placeholder location="classpath:application-cucumber.properties" order="1"/>
+
+    <context:component-scan base-package="uk.co.bty.mock.cybersource.stepdefs"/>
+    <context:annotation-config/>
+
+    <bean id="serverRunner" class="uk.co.bty.mock.cybersource.ServerRunner"/>
+
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+    <import resource="spring-integration.xml"/>
+</beans>

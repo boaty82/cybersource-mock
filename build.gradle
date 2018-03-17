@@ -1,6 +1,8 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.10.RELEASE'
+		springVersion = '4.3.8.RELEASE'
+		springIntVersion = '4.1.0.RELEASE'
 		cukesVersion = '1.2.5'
 		generatedSources = "${buildDir}/gensrc/"
 	}
@@ -32,6 +34,10 @@ task wrapper(type: Wrapper) {
 }
 
 sourceSets {
+	main.java {
+		srcDir "${generatedSources}"
+	}
+
 	integrationTest {
 		java {
 			srcDir 'src/integrationTest/java'
@@ -58,8 +64,16 @@ idea {
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter')
+	compile 'org.springframework.boot:spring-boot-starter'
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-web-services')
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile 'org.projectlombok:lombok'
+	compile 'org.apache.commons:commons-lang3:3.5'
+	compile 'com.fasterxml.jackson.core:jackson-core:2.9.4'
+
+	// Database
+	runtime("com.h2database:h2")
 
 	// JAXB code generation
 	jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
@@ -75,7 +89,14 @@ dependencies {
 	testCompile 'org.assertj:assertj-core-java8:1.0.0m1'
 
 	integrationTestCompile "info.cukes:cucumber-java:${cukesVersion}"
-	integrationTestCompile "info.cukes:cucumber-junit:${cukesVersion}"
+	integrationTestCompile "info.cukes:cucumber-spring:${cukesVersion}"
+	integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
+	integrationTestCompile "org.springframework:spring-context:${springVersion}"
+	integrationTestCompile "org.springframework:spring-test:${springVersion}"
+	integrationTestCompile 'org.apache.httpcomponents:httpclient:4.5.5'
+	integrationTestCompile "org.springframework.integration:spring-integration-core:${springIntVersion}"
+    integrationTestCompile "org.springframework.integration:spring-integration-ws:${springIntVersion}"
+    integrationTestCompile "org.springframework.integration:spring-integration-http:${springIntVersion}"
 }
 
 jaxb {

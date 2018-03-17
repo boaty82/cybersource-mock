@@ -1,0 +1,46 @@
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:si="http://www.springframework.org/schema/integration"
+        xmlns:ws="http://www.springframework.org/schema/integration/ws"
+        xmlns:http="http://www.springframework.org/schema/integration/http"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/integration
+                http://www.springframework.org/schema/integration/spring-integration.xsd
+                http://www.springframework.org/schema/integration/ws
+                http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd
+                http://www.springframework.org/schema/integration/http
+                http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
+
+    <bean id="testApiMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPaths">
+            <list>
+                <value>uk.co.bty.mock.cybersource.schema.transaction</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="testMessageSender" class="org.springframework.ws.transport.http.HttpComponentsMessageSender"/>
+    <bean id="testObjectFactory" class="uk.co.bty.mock.cybersource.schema.transaction.ObjectFactory"/>
+
+    <si:gateway id="cybersourceGateway" service-interface="uk.co.bty.mock.cybersource.test.Gateway">
+        <si:method name="checkCardEnrollment" request-channel="testRequestChannel"/>
+    </si:gateway>
+
+    <si:channel id="testRequestChannel"/>
+
+    <si:chain input-channel="testRequestChannel">
+        <si:transformer ref="testObjectFactory" method="createRequestMessage"/>
+        <ws:outbound-gateway uri="${cucumber.txn.url}"
+                             requires-reply="true"
+                             marshaller="testApiMarshaller"
+                             unmarshaller="testApiMarshaller"
+                             message-sender="testMessageSender"
+                             mapped-request-headers="ws_*">
+        </ws:outbound-gateway>
+        <si:transformer method="transform">
+            <bean class="uk.co.bty.mock.cybersource.test.ReplyMessageTransformer"/>
+        </si:transformer>
+    </si:chain>
+
+</beans>
