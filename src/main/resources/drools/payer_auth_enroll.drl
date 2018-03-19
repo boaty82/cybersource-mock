@@ -1,0 +1,53 @@
+package payerauthenrollrules
+
+import uk.co.bty.mock.cybersource.rules.RuleType;
+import uk.co.bty.mock.cybersource.rules.data.RuleData;
+import uk.co.bty.mock.cybersource.constants.TransactionDecision;
+import uk.co.bty.mock.cybersource.constants.ReasonCode;
+import uk.co.bty.mock.cybersource.data.PayerAuthEnrollResponseData;
+import uk.co.bty.mock.cybersource.data.PayerAuthEnrollRequestData;
+import uk.co.bty.mock.cybersource.dao.token.Token;
+import uk.co.bty.mock.cybersource.constants.VeresEnrolled
+
+rule "Payer Auth - Enrolled"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.PAYER_AUTH_ENROLL, response == null, request#PayerAuthEnrollRequestData.token.cardNumber == "4000000000000002")
+then
+    r.setResponse(PayerAuthEnrollResponseData.builder()
+                                .decision(TransactionDecision.REJECT)
+                                .enrolled(VeresEnrolled.YES)
+                                .reasonCode(ReasonCode.ENROLLED_FOR_PAYER_AUTHENTICATION)
+                                .message("Payer Auth - Enrolled")
+                                .build());
+    update(r);
+end
+
+rule "Payer Auth - Not Enrolled"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.PAYER_AUTH_ENROLL, response == null, request#PayerAuthEnrollRequestData.token.cardNumber == "4000000000000001")
+then
+    r.setResponse(PayerAuthEnrollResponseData.builder()
+                                .decision(TransactionDecision.ACCEPT)
+                                .enrolled(VeresEnrolled.NO)
+                                .reasonCode(ReasonCode.ACCEPT)
+                                .message("Payer Auth - Not Enrolled")
+                                .build());
+    update(r);
+end
+
+
+rule "Payer Auth - Unknown Enrolled"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.PAYER_AUTH_ENROLL, response == null)
+then
+    r.setResponse(PayerAuthEnrollResponseData.builder()
+                                .decision(TransactionDecision.ACCEPT)
+                                .enrolled(VeresEnrolled.UNKNOWN)
+                                .reasonCode(ReasonCode.ACCEPT)
+                                .message("Payer Auth - Unknown")
+                                .build());
+    update(r);
+end

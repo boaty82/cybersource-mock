@@ -1,11 +1,13 @@
 package uk.co.bty.mock.cybersource.controller.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Value;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
 public class SopResponseForm
 {

@@ -72,13 +72,13 @@ dependencies {
 	compile 'org.springframework.ws:spring-ws-security'
 	compile 'org.projectlombok:lombok'
 	compile 'org.apache.commons:commons-lang3:3.5'
-	compile 'com.fasterxml.jackson.core:jackson-core:2.9.4'
 	compile 'joda-time:joda-time:2.9.9'
 	compile 'com.google.guava:guava:24.0-jre'
 	compile 'org.drools:drools-core:7.5.0.Final'
 	compile 'org.drools:drools-compiler:7.5.0.Final'
 	compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	compile 'javax.servlet:jstl'
+	compile 'wsdl4j:wsdl4j:1.6.1'
 
 	// Database
 	runtime("com.h2database:h2")

@@ -12,7 +12,16 @@
         </property>
     </bean>
 
+    <alias name="delegatingTransactionService" alias="transactionService" />
+    <bean id="delegatingTransactionService" class="uk.co.bty.mock.cybersource.service.transaction.impl.DelegatingTransactionService">
+        <constructor-arg ref="transactionServices" />
+    </bean>
+
+    <util:list id="transactionServices" value-type="uk.co.bty.mock.cybersource.service.transaction.TransactionService" list-class="java.util.LinkedList"/>
+
+
     <import resource="drools.xml"/>
     <import resource="sop.xml"/>
-    
+    <import resource="payer-auth-enroll.xml"/>
+
 </beans>
