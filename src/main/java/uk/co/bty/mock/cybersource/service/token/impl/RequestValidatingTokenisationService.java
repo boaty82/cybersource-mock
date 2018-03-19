@@ -28,14 +28,14 @@ public class RequestValidatingTokenisationService implements TokenisationService
 
 		final TokenResponseData result = validationResult.isValid()
 				? getDelegateTokenisationService().tokenise(request)
-				: buildErrorResponse(request, validationResult);
+				: buildErrorResponse(validationResult);
 
 		LOG.info("Result is: {}", result);
 		return result;
 
 	}
 
-	private TokenResponseData buildErrorResponse(final TokenRequestData request, final ResultData validationResult)
+	private TokenResponseData buildErrorResponse(final ResultData validationResult)
 	{
 		return TokenResponseData.builder()
 				.decision(TransactionDecision.ERROR)
