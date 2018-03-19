@@ -14,7 +14,7 @@
         </constructor-arg>
         <constructor-arg>
             <map>
-                <entry key="new_look_gbp_ecommerce">
+                <entry key="test_gbp_ecommerce">
                     <bean class="uk.co.bty.mock.cybersource.rules.drools.KieBaseBuilder" factory-method="createService">
                         <constructor-arg value="test_gbp_ecommerce"/>
                         <constructor-arg>

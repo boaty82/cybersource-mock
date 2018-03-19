@@ -7,7 +7,8 @@ import uk.co.bty.mock.cybersource.constants.ReasonCode;
 import uk.co.bty.mock.cybersource.data.TokenRequestData;
 import uk.co.bty.mock.cybersource.data.TokenResponseData
 import uk.co.bty.mock.cybersource.constants.TransactionDecision
-import uk.co.bty.mock.cybersource.constants.ReasonCode;
+import uk.co.bty.mock.cybersource.constants.ReasonCode
+import java.util.UUID;
 
 rule "Token - Surname is Decline"
 no-loop
@@ -18,7 +19,19 @@ then
                           .decision(TransactionDecision.DECLINE)
                           .message("Billing name was 'TOKEN DECLINE'")
                           .reasonCode(ReasonCode.DECLINED)
-                          .requestToken("zzzzzz")
+                          .build());
+    update(r);
+end
+
+rule "Token - Surname is Review"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.TOKEN, response == null, request#TokenRequestData.billForename == "TOKEN", request#TokenRequestData.billSurname == "REVIEW")
+then
+    r.setResponse(TokenResponseData.builder()
+                          .decision(TransactionDecision.REVIEW)
+                          .message("Billing name was 'TOKEN REVIEW'")
+                          .reasonCode(ReasonCode.BANK_HAS_QUESTIONS)
                           .build());
     update(r);
 end
@@ -32,7 +45,7 @@ then
                           .decision(TransactionDecision.ACCEPT)
                           .message("Request was processed successfully.")
                           .reasonCode(ReasonCode.ACCEPT)
-                          .requestToken("abc123def456")
+                          .requestToken(UUID.randomUUID().toString())
                           .build());
     update(r);
 end
