@@ -39,7 +39,7 @@ public class TransactionController
 				.requestToken(UUID.randomUUID().toString())
 				.build();
 		transactionService.apply(request, response);
-		LOG.info("Responding with \r\n{}", ReflectionToStringBuilder.toString(response, STYLE));
+		LOG.debug("Responding with \r\n{}", ReflectionToStringBuilder.toString(response, STYLE));
 		return response;
 	}
 }
