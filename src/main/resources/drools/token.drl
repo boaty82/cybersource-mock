@@ -45,7 +45,6 @@ then
                           .decision(TransactionDecision.ACCEPT)
                           .message("Request was processed successfully.")
                           .reasonCode(ReasonCode.ACCEPT)
-                          .requestToken(UUID.randomUUID().toString())
                           .build());
     update(r);
 end

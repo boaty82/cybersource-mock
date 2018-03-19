@@ -1,10 +1,13 @@
 package uk.co.bty.mock.cybersource.dao.token;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
 import uk.co.bty.mock.cybersource.constants.CardType;
 import uk.co.bty.mock.cybersource.constants.ReasonCode;
@@ -55,4 +58,13 @@ public class Token
 	private ReasonCode reasonCode;
 	private String requestToken;
 	//</editor-fold>
+
+	@PrePersist
+	public void setDefaultValues()
+	{
+		if (this.requestToken == null)
+		{
+			this.requestToken = UUID.randomUUID().toString();
+		}
+	}
 }
