@@ -67,7 +67,7 @@ public class EnrollmentCheckStepDefs
 				.payerAuthEnrollService(enrollService)
 				.build();
 
-		cardState.setEnrollmentReplyMessage(gateway.checkCardEnrollment(requestMessage));
+		cardState.setEnrollmentReplyMessage(gateway.checkCardPayerAuthEnrollment(requestMessage));
 	}
 
 	private BigInteger stringToNumber(final String value)
@@ -78,8 +78,8 @@ public class EnrollmentCheckStepDefs
 	@Then("^the enrollment status is \"([^\"]*)\"$")
 	public void theEnrollmentStatusIs(final String status)
 	{
-		assertThat(VeresEnrolled.valueOf(status).getCode())
+		assertThat(cardState.getEnrollmentReplyMessage().getPayerAuthEnrollReply().getVeresEnrolled())
 				.as("VeresEnrolled was not as expected")
-				.isEqualTo(cardState.getEnrollmentReplyMessage().getPayerAuthEnrollReply().getVeresEnrolled());
+				.isEqualTo(VeresEnrolled.valueOf(status).getCode());
 	}
 }

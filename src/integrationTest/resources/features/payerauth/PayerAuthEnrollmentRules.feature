@@ -1,3 +1,4 @@
+@Wip
 Feature: Cybersource Payer Auth Enrollment
 
   Scenario Outline: <Card Type> '<Enrolled>' Enrollment
@@ -5,8 +6,8 @@ Feature: Cybersource Payer Auth Enrollment
     Given I enter the following card data
       | Card Type   | Card Number   | Exp Month   | Exp Year   |
       | <Card Type> | <Card Number> | <Exp Month> | <Exp Year> |
-    When I request a token
-    And I check if the card is enrolled
+    And I request a token
+    When I check if the card is enrolled
     Then the enrollment status is "<Enrolled>"
 
     Examples:

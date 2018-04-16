@@ -5,5 +5,5 @@ import uk.co.bty.mock.cybersource.schema.transaction.RequestMessage;
 
 public interface Gateway
 {
-	ReplyMessage checkCardEnrollment(final RequestMessage requestMessage);
+	ReplyMessage checkCardPayerAuthEnrollment(final RequestMessage requestMessage);
 }
