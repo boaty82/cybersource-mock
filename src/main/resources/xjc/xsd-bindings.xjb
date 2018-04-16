@@ -21,6 +21,13 @@
                 <annox:annotate annox:class="lombok.AllArgsConstructor"/>
             </annox:annotate>
         </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='PayerAuthValidateReply']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
 
         <!-- TO ENABLE BUILDER USE IN TEST CODE -->
         <jaxb:bindings node="xs:complexType[@name='RequestMessage']">
@@ -52,6 +59,13 @@
             </annox:annotate>
         </jaxb:bindings>
         <jaxb:bindings node="xs:complexType[@name='PayerAuthEnrollService']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='PayerAuthValidateService']">
             <annox:annotate>
                 <annox:annotate annox:class="lombok.Builder"/>
                 <annox:annotate annox:class="lombok.NoArgsConstructor"/>

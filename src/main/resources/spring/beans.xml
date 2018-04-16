@@ -23,5 +23,6 @@
     <import resource="drools.xml"/>
     <import resource="sop.xml"/>
     <import resource="payer-auth-enroll.xml"/>
+    <import resource="payer-auth-validation.xml"/>
 
 </beans>

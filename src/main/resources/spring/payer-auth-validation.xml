@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="payerAuthValidationRuleResultConverter" class="uk.co.bty.mock.cybersource.service.transaction.converter.PayerAuthValidationRuleResultConverter"/>
+
+    <bean id="payerAuthValidationResultSavingService" class="uk.co.bty.mock.cybersource.service.impl.AbstractResultSavingService">
+        <property name="repository" ref="payerAuthValidationRepository"/>
+        <property name="converter" ref="payerAuthValidationRuleResultConverter"/>
+    </bean>
+
+    <bean id="payerAuthValidationRuleRequestConverter" class="uk.co.bty.mock.cybersource.service.transaction.converter.PayerAuthValidationRuleRequestConverter">
+        <property name="payerAuthEnrollRepository" ref="payerAuthEnrollRepository"/>
+        <property name="tokenRepository" ref="tokenRepository"/>
+    </bean>
+
+    <bean id="payerAuthValidationResultPopulator" class="uk.co.bty.mock.cybersource.service.transaction.converter.PayerAuthValidationResultPopulator"/>
+
+    <bean id="payerAuthValidationTransactionService" class="uk.co.bty.mock.cybersource.service.transaction.impl.PayerAuthValidationTransactionService">
+        <property name="ruleEngine" ref="ruleEngine"/>
+        <property name="ruleRequestConverter" ref="payerAuthValidationRuleRequestConverter"/>
+        <property name="ruleResultPopulator" ref="payerAuthValidationResultPopulator"/>
+        <property name="resultSavingService" ref="payerAuthValidationResultSavingService"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="transactionServices"/>
+        <property name="targetMethod" value="add"/>
+        <property name="arguments">
+            <list>
+                <ref bean="payerAuthValidationTransactionService"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultPayerAuthEnrolCheckService" alias="payerAuthEnrolCheckService"/>
+    <bean id="defaultPayerAuthEnrolCheckService" class="uk.co.bty.mock.cybersource.service.payerauth.impl.DefaultPayerAuthEnrolCheckService">
+        <property name="payerAuthEnrollRepository" ref="payerAuthEnrollRepository"/>
+    </bean>
+
+</beans>

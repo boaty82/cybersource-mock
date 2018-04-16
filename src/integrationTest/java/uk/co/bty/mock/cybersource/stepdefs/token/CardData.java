@@ -11,5 +11,5 @@ public class CardData
 	private String expYear;
 	private String forename;
 	private String surname;
-
+	private String token;
 }

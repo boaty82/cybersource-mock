@@ -14,4 +14,5 @@ public class CardState
 	private SopRequestForm sopRequestForm;
 	private SopResponseForm postResult;
 	private ReplyMessage enrollmentReplyMessage;
+	private ReplyMessage payerAuthValidationReplyMessage;
 }

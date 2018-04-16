@@ -1,0 +1,41 @@
+package payerauthvalidationrules
+
+import uk.co.bty.mock.cybersource.rules.RuleType;
+import uk.co.bty.mock.cybersource.rules.data.RuleData;
+import uk.co.bty.mock.cybersource.data.PayerAuthValidationRequestData
+import uk.co.bty.mock.cybersource.data.PayerAuthValidationResponseData
+import uk.co.bty.mock.cybersource.constants.ReasonCode
+import uk.co.bty.mock.cybersource.constants.ParesStatus
+import uk.co.bty.mock.cybersource.constants.Eci
+import uk.co.bty.mock.cybersource.constants.PayerAuthValidateCommerceIndicator
+import uk.co.bty.mock.cybersource.constants.PayerAuthValidateResult
+
+rule "Payer Auth Validate - Accept"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.PAYER_AUTH_VALIDATION, response == null, PayerAuthValidateResult.SUCCESS == request#PayerAuthValidationRequestData.enroll.selectedResult)
+then
+    r.setResponse(PayerAuthValidationResponseData.builder()
+                                .reasonCode(ReasonCode.ACCEPT)
+                                .message("Payer Auth Validate - Accepted")
+                                .paresStatus(ParesStatus.SUCCESS)
+                                .eci(Eci.SUCCESS)
+                                .commerceIndicator(PayerAuthValidateCommerceIndicator.VBV_SUCCESS)
+                                .build());
+    update(r);
+end
+
+rule "Payer Auth Validate - Fallback"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.PAYER_AUTH_VALIDATION, response == null)
+then
+    r.setResponse(PayerAuthValidationResponseData.builder()
+                                .reasonCode(ReasonCode.PAYER_NOT_AUTHENTICATED)
+                                .message("Payer Auth Validate - Fallback")
+                                .paresStatus(ParesStatus.FAILED_OR_CANCELLED_AUTHENTICATION)
+                                .eci(Eci.FAILED)
+                                .commerceIndicator(PayerAuthValidateCommerceIndicator.VBV_FAILURE)
+                                .build());
+    update(r);
+end
