@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="authTxnRuleResultConverter" class="uk.co.bty.mock.cybersource.service.transaction.converter.AuthTxnRuleResultConverter"/>
+
+    <bean id="authTxnResultSavingService" class="uk.co.bty.mock.cybersource.service.impl.AbstractResultSavingService">
+        <property name="repository" ref="authTxnRepository"/>
+        <property name="converter" ref="authTxnRuleResultConverter"/>
+    </bean>
+
+    <bean id="authTxnRuleRequestConverter" class="uk.co.bty.mock.cybersource.service.transaction.converter.AuthTxnRuleRequestConverter">
+        <property name="tokenRepository" ref="tokenRepository"/>
+    </bean>
+
+    <bean id="authTxnResultPopulator" class="uk.co.bty.mock.cybersource.service.transaction.converter.AuthTxnResultPopulator"/>
+
+    <bean id="authorisationTransactionService" class="uk.co.bty.mock.cybersource.service.transaction.impl.AuthorisationTransactionService">
+        <property name="ruleRequestConverter" ref="authTxnRuleRequestConverter"/>
+        <property name="ruleEngine" ref="ruleEngine"/>
+        <property name="resultSavingService" ref="authTxnResultSavingService"/>
+        <property name="ruleResultPopulator" ref="authTxnResultPopulator"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="transactionServices"/>
+        <property name="targetMethod" value="add"/>
+        <property name="arguments">
+            <list>
+                <ref bean="authorisationTransactionService"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

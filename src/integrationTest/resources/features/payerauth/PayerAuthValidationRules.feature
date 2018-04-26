@@ -10,5 +10,5 @@ Feature: Cybersource Payer Auth Validation
     Then the card payer authorisation is "<Result>" and the indicator is "<Commerce Indicator>"
 
     Examples:
-      | Card Type | Token  | Exp Month | Exp Year | Result  | Commerce Indicator |
-      | VISA      | 123456 | 12        | 2025     | SUCCESS | VBV_SUCCESS        |
+      | Card Type | Token | Exp Month | Exp Year | Result  | Commerce Indicator |
+      | VISA      | 1     | 12        | 2025     | SUCCESS | VBV_SUCCESS        |

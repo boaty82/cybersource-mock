@@ -16,6 +16,7 @@ import uk.co.bty.mock.cybersource.schema.transaction.RecurringSubscriptionInfo;
 import uk.co.bty.mock.cybersource.schema.transaction.RequestMessage;
 import uk.co.bty.mock.cybersource.stepdefs.state.CardState;
 import uk.co.bty.mock.cybersource.stepdefs.token.SopRequestForm;
+import uk.co.bty.mock.cybersource.stepdefs.util.CardUtil;
 import uk.co.bty.mock.cybersource.test.Gateway;
 
 import cucumber.api.java.en.And;
@@ -46,8 +47,8 @@ public class EnrollmentCheckStepDefs
 		final PurchaseTotals purchaseTotals = PurchaseTotals.builder().grandTotalAmount("15.00").build();
 
 		final Card card = Card.builder()
-				.expirationMonth(stringToNumber(sopRequestForm.getCard_expiry_month()))
-				.expirationYear(stringToNumber(sopRequestForm.getCard_expiry_year()))
+				.expirationMonth(CardUtil.stringToNumber(sopRequestForm.getCard_expiry_month()))
+				.expirationYear(CardUtil.stringToNumber(sopRequestForm.getCard_expiry_year()))
 				.cardType(sopRequestForm.getCard_type())
 				.build();
 
@@ -68,11 +69,6 @@ public class EnrollmentCheckStepDefs
 				.build();
 
 		cardState.setEnrollmentReplyMessage(gateway.checkCardPayerAuthEnrollment(requestMessage));
-	}
-
-	private BigInteger stringToNumber(final String value)
-	{
-		return new BigInteger(value.substring(value.indexOf(":") + 1));
 	}
 
 	@Then("^the enrollment status is \"([^\"]*)\"$")

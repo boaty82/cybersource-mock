@@ -28,6 +28,13 @@
                 <annox:annotate annox:class="lombok.AllArgsConstructor"/>
             </annox:annotate>
         </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='CCAuthReply']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
 
         <!-- TO ENABLE BUILDER USE IN TEST CODE -->
         <jaxb:bindings node="xs:complexType[@name='RequestMessage']">
@@ -66,6 +73,41 @@
             </annox:annotate>
         </jaxb:bindings>
         <jaxb:bindings node="xs:complexType[@name='PayerAuthValidateService']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='CCAuthService']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='BillTo']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='ShipTo']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='Item']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='MerchantDefinedData']">
             <annox:annotate>
                 <annox:annotate annox:class="lombok.Builder"/>
                 <annox:annotate annox:class="lombok.NoArgsConstructor"/>

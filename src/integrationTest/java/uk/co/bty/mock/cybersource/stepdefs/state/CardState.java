@@ -15,4 +15,5 @@ public class CardState
 	private SopResponseForm postResult;
 	private ReplyMessage enrollmentReplyMessage;
 	private ReplyMessage payerAuthValidationReplyMessage;
+	private ReplyMessage authorisationReplyMessage;
 }

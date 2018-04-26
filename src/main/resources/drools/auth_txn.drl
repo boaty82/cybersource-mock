@@ -1,0 +1,54 @@
+package authtxnrules
+
+import uk.co.bty.mock.cybersource.rules.RuleType;
+import uk.co.bty.mock.cybersource.rules.data.RuleData;
+import uk.co.bty.mock.cybersource.data.AuthTxnRequestData
+import uk.co.bty.mock.cybersource.data.AuthTxnResponseData
+import uk.co.bty.mock.cybersource.constants.TransactionDecision
+import uk.co.bty.mock.cybersource.constants.AvsCode
+import uk.co.bty.mock.cybersource.constants.CvnCode
+import uk.co.bty.mock.cybersource.constants.ReasonCode
+import org.apache.commons.lang3.RandomStringUtils
+
+rule "Auth Txn - Decline"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.AUTH_TXN, response == null, request#AuthTxnRequestData.token.billForename == "AUTH", request#AuthTxnRequestData.token.billSurname == "DECLINE")
+then
+    r.setResponse(AuthTxnResponseData.builder()
+                                .decision(TransactionDecision.DECLINE)
+                                .reasonCode(ReasonCode.ACCOUNT_FROZEN)
+                                .avsCode(AvsCode.MATCH)
+                                .cvnCode(CvnCode.MATCH)
+                                .build());
+    update(r);
+end
+
+rule "Auth Txn - REVIEW"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.AUTH_TXN, response == null, request#AuthTxnRequestData.token.billForename == "AUTH", request#AuthTxnRequestData.token.billSurname == "REVIEW")
+then
+    r.setResponse(AuthTxnResponseData.builder()
+                                .decision(TransactionDecision.REVIEW)
+                                .reasonCode(ReasonCode.CVN_DECLINED)
+                                .avsCode(AvsCode.MATCH)
+                                .cvnCode(CvnCode.NOT_MATCHED)
+                                .build());
+    update(r);
+end
+
+rule "Auth Txn - Accept"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.AUTH_TXN, response == null)
+then
+    r.setResponse(AuthTxnResponseData.builder()
+                                .decision(TransactionDecision.ACCEPT)
+                                .reasonCode(ReasonCode.ACCEPT)
+                                .avsCode(AvsCode.MATCH)
+                                .cvnCode(CvnCode.MATCH)
+                                .authCode(RandomStringUtils.randomAlphabetic(7))
+                                .build());
+    update(r);
+end

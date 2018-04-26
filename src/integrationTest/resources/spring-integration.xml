@@ -26,6 +26,7 @@
     <si:gateway id="cybersourceGateway" service-interface="uk.co.bty.mock.cybersource.test.Gateway">
         <si:method name="checkCardPayerAuthEnrollment" request-channel="testRequestChannel"/>
         <si:method name="checkCardPayerAuthValidation" request-channel="testRequestChannel"/>
+        <si:method name="transactionAuthorisation" request-channel="testRequestChannel"/>
     </si:gateway>
 
     <si:channel id="testRequestChannel"/>

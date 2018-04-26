@@ -1,4 +1,3 @@
-@Wip
 Feature: Cybersource Payer Auth Enrollment
 
   Scenario Outline: <Card Type> '<Enrolled>' Enrollment
