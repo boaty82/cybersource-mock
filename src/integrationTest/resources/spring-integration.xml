@@ -24,9 +24,6 @@
     <bean id="testObjectFactory" class="uk.co.bty.mock.cybersource.schema.transaction.ObjectFactory"/>
 
     <si:gateway id="cybersourceGateway" service-interface="uk.co.bty.mock.cybersource.test.Gateway">
-        <si:method name="checkCardPayerAuthEnrollment" request-channel="testRequestChannel"/>
-        <si:method name="checkCardPayerAuthValidation" request-channel="testRequestChannel"/>
-        <si:method name="transactionAuthorisation" request-channel="testRequestChannel"/>
         <si:method name="getResponse" request-channel="testRequestChannel"/>
     </si:gateway>
 

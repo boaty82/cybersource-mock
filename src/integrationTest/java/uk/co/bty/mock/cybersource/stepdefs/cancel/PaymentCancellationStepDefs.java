@@ -1,23 +1,22 @@
 package uk.co.bty.mock.cybersource.stepdefs.cancel;
 
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.annotation.Resource;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import uk.co.bty.mock.cybersource.constants.ReasonCode;
 import uk.co.bty.mock.cybersource.schema.transaction.CCAuthReversalService;
 import uk.co.bty.mock.cybersource.schema.transaction.Item;
 import uk.co.bty.mock.cybersource.schema.transaction.PurchaseTotals;
-import uk.co.bty.mock.cybersource.schema.transaction.RecurringSubscriptionInfo;
 import uk.co.bty.mock.cybersource.schema.transaction.RequestMessage;
 import uk.co.bty.mock.cybersource.stepdefs.state.ResponseState;
 import uk.co.bty.mock.cybersource.test.Gateway;

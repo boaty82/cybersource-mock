@@ -8,5 +8,8 @@ import uk.co.bty.mock.cybersource.schema.transaction.ReplyMessage;
 @Data
 @Component
 public class ResponseState {
+    private ReplyMessage enrollmentReplyMessage;
+    private ReplyMessage payerAuthValidationReplyMessage;
+    private ReplyMessage authorisationReplyMessage;
     private ReplyMessage cancellationReplyMessage;
 }

@@ -16,6 +16,7 @@ import uk.co.bty.mock.cybersource.schema.transaction.PayerAuthValidateService;
 import uk.co.bty.mock.cybersource.schema.transaction.RecurringSubscriptionInfo;
 import uk.co.bty.mock.cybersource.schema.transaction.RequestMessage;
 import uk.co.bty.mock.cybersource.stepdefs.state.CardState;
+import uk.co.bty.mock.cybersource.stepdefs.state.ResponseState;
 import uk.co.bty.mock.cybersource.test.Gateway;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +28,9 @@ public class ValidationStepDefs
 
 	@Autowired
 	private CardState cardState;
+
+	@Autowired
+	private ResponseState responseState;
 
 	@Value("${cucumber.merchant.id")
 	private String merchantId;
@@ -60,13 +64,13 @@ public class ValidationStepDefs
 				.recurringSubscriptionInfo(subscriptionInfo)
 				.build();
 
-		cardState.setPayerAuthValidationReplyMessage(gateway.checkCardPayerAuthValidation(requestMessage));
+		responseState.setPayerAuthValidationReplyMessage(gateway.getResponse(requestMessage));
 	}
 
 	@Then("^the card payer authorisation is \"([^\"]*)\" and the indicator is \"([^\"]*)\"$")
 	public void theCardPayerAuthorisationIsAndTheIndicatorIs(final String status, final String indicator)
 	{
-		final PayerAuthValidateReply reply = cardState.getPayerAuthValidationReplyMessage().getPayerAuthValidateReply();
+		final PayerAuthValidateReply reply = responseState.getPayerAuthValidationReplyMessage().getPayerAuthValidateReply();
 
 		assertThat(reply.getAuthenticationResult())
 				.as("VeresEnrolled was not as expected")

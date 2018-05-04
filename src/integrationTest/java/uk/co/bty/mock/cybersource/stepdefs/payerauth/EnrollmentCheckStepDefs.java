@@ -1,12 +1,12 @@
 package uk.co.bty.mock.cybersource.stepdefs.payerauth;
 
-import java.math.BigInteger;
-
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Then;
 import uk.co.bty.mock.cybersource.constants.VeresEnrolled;
 import uk.co.bty.mock.cybersource.controller.form.SopResponseForm;
 import uk.co.bty.mock.cybersource.schema.transaction.Card;
@@ -15,12 +15,10 @@ import uk.co.bty.mock.cybersource.schema.transaction.PurchaseTotals;
 import uk.co.bty.mock.cybersource.schema.transaction.RecurringSubscriptionInfo;
 import uk.co.bty.mock.cybersource.schema.transaction.RequestMessage;
 import uk.co.bty.mock.cybersource.stepdefs.state.CardState;
+import uk.co.bty.mock.cybersource.stepdefs.state.ResponseState;
 import uk.co.bty.mock.cybersource.stepdefs.token.SopRequestForm;
 import uk.co.bty.mock.cybersource.stepdefs.util.CardUtil;
 import uk.co.bty.mock.cybersource.test.Gateway;
-
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +29,9 @@ public class EnrollmentCheckStepDefs
 
 	@Autowired
 	private CardState cardState;
+
+	@Autowired
+	private ResponseState responseState;
 
 	@Value("${cucumber.merchant.id")
 	private String merchantId;
@@ -68,13 +69,13 @@ public class EnrollmentCheckStepDefs
 				.payerAuthEnrollService(enrollService)
 				.build();
 
-		cardState.setEnrollmentReplyMessage(gateway.checkCardPayerAuthEnrollment(requestMessage));
+		responseState.setEnrollmentReplyMessage(gateway.getResponse(requestMessage));
 	}
 
 	@Then("^the enrollment status is \"([^\"]*)\"$")
 	public void theEnrollmentStatusIs(final String status)
 	{
-		assertThat(cardState.getEnrollmentReplyMessage().getPayerAuthEnrollReply().getVeresEnrolled())
+		assertThat(responseState.getEnrollmentReplyMessage().getPayerAuthEnrollReply().getVeresEnrolled())
 				.as("VeresEnrolled was not as expected")
 				.isEqualTo(VeresEnrolled.valueOf(status).getCode());
 	}
