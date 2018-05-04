@@ -37,6 +37,7 @@ public class TransactionController
 				.merchantReferenceCode(request.getMerchantReferenceCode())
 				.requestID(UUID.randomUUID().toString())
 				.requestToken(UUID.randomUUID().toString())
+				.purchaseTotals(request.getPurchaseTotals())
 				.build();
 		transactionService.apply(request, response);
 		LOG.debug("Responding with \r\n{}", ReflectionToStringBuilder.toString(response, STYLE));

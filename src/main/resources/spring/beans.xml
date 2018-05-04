@@ -19,11 +19,11 @@
 
     <util:list id="transactionServices" value-type="uk.co.bty.mock.cybersource.service.transaction.TransactionService" list-class="java.util.LinkedList"/>
 
-
     <import resource="drools.xml"/>
     <import resource="sop.xml"/>
     <import resource="payer-auth-enroll.xml"/>
     <import resource="payer-auth-validation.xml"/>
     <import resource="auth-txn.xml"/>
+    <import resource="cancel-auth-txn.xml"/>
 
 </beans>

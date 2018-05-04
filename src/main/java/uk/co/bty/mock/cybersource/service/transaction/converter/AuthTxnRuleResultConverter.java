@@ -15,14 +15,15 @@ public class AuthTxnRuleResultConverter implements Converter<AuthTxnRuleData, Au
 		final AuthTxnResponseData response = source.getResponse();
 
 		return AuthTxn.builder()
-				.merchantId(source.getProfileId())
+				.id(source.getResponseId())
 				.amount(source.getRequest().getRequest().getPurchaseTotals().getGrandTotalAmount())
 				.decision(response.getDecision())
 				.reasonCode(response.getReasonCode())
 				.avsCode(response.getAvsCode())
 				.cvnCode(response.getCvnCode())
 				.authCode(response.getAuthCode())
-				.time(DateTime.now().toString())
+				.txnTime(DateTime.now().toString())
+				.tokenId(source.getRequest().getToken().getPaymentToken())
 				.build();
 	}
 }

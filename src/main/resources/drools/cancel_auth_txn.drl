@@ -1,0 +1,45 @@
+package authtxnrules
+
+import uk.co.bty.mock.cybersource.rules.RuleType;
+import uk.co.bty.mock.cybersource.rules.data.RuleData;
+import uk.co.bty.mock.cybersource.data.CancelAuthTxnRequestData
+import uk.co.bty.mock.cybersource.data.CancelAuthTxnResponseData
+import uk.co.bty.mock.cybersource.constants.TransactionDecision
+import uk.co.bty.mock.cybersource.constants.ReasonCode
+import org.apache.commons.lang3.RandomStringUtils
+
+rule "Cancel Auth Txn - Decline"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.CANCEL_AUTH_TXN, response == null, request#CancelAuthTxnRequestData.token.billForename == "CANCEL", request#CancelAuthTxnRequestData.token.billSurname == "DECLINE")
+then
+    r.setResponse(CancelAuthTxnResponseData.builder()
+                                .decision(TransactionDecision.DECLINE)
+                                .reasonCode(ReasonCode.ACCOUNT_FROZEN)
+                                .build());
+    update(r);
+end
+
+rule "Cancel Auth Txn - REVIEW"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.CANCEL_AUTH_TXN, response == null, request#CancelAuthTxnRequestData.token.billForename == "CANCEL", request#CancelAuthTxnRequestData.token.billSurname == "REVIEW")
+then
+    r.setResponse(CancelAuthTxnResponseData.builder()
+                                .decision(TransactionDecision.REVIEW)
+                                .reasonCode(ReasonCode.CVN_DECLINED)
+                                .build());
+    update(r);
+end
+
+rule "Cancel Auth Txn - Accept"
+no-loop
+when
+    r: RuleData (ruleType == RuleType.CANCEL_AUTH_TXN, response == null)
+then
+    r.setResponse(CancelAuthTxnResponseData.builder()
+                                .decision(TransactionDecision.ACCEPT)
+                                .reasonCode(ReasonCode.ACCEPT)
+                                .build());
+    update(r);
+end

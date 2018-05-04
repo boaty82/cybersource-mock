@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="cancelAuthTxnRuleResultConverter" class="uk.co.bty.mock.cybersource.service.transaction.converter.CancelAuthTxnRuleResultConverter"/>
+
+    <bean id="cancelAuthTxnResultSavingService" class="uk.co.bty.mock.cybersource.service.impl.AbstractResultSavingService">
+        <property name="repository" ref="cancelAuthTxnRepository"/>
+        <property name="converter" ref="cancelAuthTxnRuleResultConverter"/>
+    </bean>
+
+    <bean id="cancelAuthTxnRuleRequestConverter" class="uk.co.bty.mock.cybersource.service.transaction.converter.CancelAuthTxnRuleRequestConverter">
+        <property name="tokenRepository" ref="tokenRepository"/>
+        <property name="authTxnRepository" ref="authTxnRepository"/>
+    </bean>
+
+    <bean id="cancelAuthTxnResultPopulator" class="uk.co.bty.mock.cybersource.service.transaction.converter.CancelAuthTxnResultPopulator"/>
+
+    <bean id="cancelAuthorisationTransactionService" class="uk.co.bty.mock.cybersource.service.transaction.impl.CancelAuthorisationTransactionService">
+        <property name="ruleRequestConverter" ref="cancelAuthTxnRuleRequestConverter"/>
+        <property name="ruleEngine" ref="ruleEngine"/>
+        <property name="resultSavingService" ref="cancelAuthTxnResultSavingService"/>
+        <property name="ruleResultPopulator" ref="cancelAuthTxnResultPopulator"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="transactionServices"/>
+        <property name="targetMethod" value="add"/>
+        <property name="arguments">
+            <list>
+                <ref bean="cancelAuthorisationTransactionService"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

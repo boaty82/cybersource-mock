@@ -16,7 +16,7 @@ public class AuthTxnResultPopulator implements Populator<AuthTxn, ReplyMessage>
 				.reasonCode(authTxn.getReasonCode().getBigInt())
 				.amount(authTxn.getAmount())
 				.authorizationCode(authTxn.getAuthCode())
-				.authorizedDateTime(authTxn.getTime())
+				.authorizedDateTime(authTxn.getTxnTime())
 				.avsCode(authTxn.getAvsCode().getCode())
 				.avsCodeRaw(authTxn.getAvsCode().getCode())
 				.cvCode(authTxn.getCvnCode().getCode())

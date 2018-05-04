@@ -27,6 +27,7 @@
         <si:method name="checkCardPayerAuthEnrollment" request-channel="testRequestChannel"/>
         <si:method name="checkCardPayerAuthValidation" request-channel="testRequestChannel"/>
         <si:method name="transactionAuthorisation" request-channel="testRequestChannel"/>
+        <si:method name="getResponse" request-channel="testRequestChannel"/>
     </si:gateway>
 
     <si:channel id="testRequestChannel"/>

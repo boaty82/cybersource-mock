@@ -10,4 +10,6 @@ public interface Gateway
 	ReplyMessage checkCardPayerAuthValidation(final RequestMessage requestMessage);
 
 	ReplyMessage transactionAuthorisation(final RequestMessage requestMessage);
+
+	ReplyMessage getResponse(final RequestMessage requestMessage);
 }

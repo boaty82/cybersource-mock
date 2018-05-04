@@ -3,7 +3,6 @@ package uk.co.bty.mock.cybersource.dao.txn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import uk.co.bty.mock.cybersource.constants.AvsCode;
@@ -24,7 +23,6 @@ import lombok.NoArgsConstructor;
 public class AuthTxn
 {
 	@Id
-	@GeneratedValue
 	private String id;
 
 	@Enumerated(EnumType.STRING)
@@ -43,7 +41,9 @@ public class AuthTxn
 
 	private String authCode;
 
-	private String time;
+	private String txnTime;
 
 	private String merchantId;
+	
+	private int tokenId;
 }

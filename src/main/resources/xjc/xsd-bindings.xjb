@@ -35,6 +35,13 @@
                 <annox:annotate annox:class="lombok.AllArgsConstructor"/>
             </annox:annotate>
         </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='CCAuthReversalReply']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
 
         <!-- TO ENABLE BUILDER USE IN TEST CODE -->
         <jaxb:bindings node="xs:complexType[@name='RequestMessage']">
@@ -108,6 +115,13 @@
             </annox:annotate>
         </jaxb:bindings>
         <jaxb:bindings node="xs:complexType[@name='MerchantDefinedData']">
+            <annox:annotate>
+                <annox:annotate annox:class="lombok.Builder"/>
+                <annox:annotate annox:class="lombok.NoArgsConstructor"/>
+                <annox:annotate annox:class="lombok.AllArgsConstructor"/>
+            </annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='CCAuthReversalService']">
             <annox:annotate>
                 <annox:annotate annox:class="lombok.Builder"/>
                 <annox:annotate annox:class="lombok.NoArgsConstructor"/>
